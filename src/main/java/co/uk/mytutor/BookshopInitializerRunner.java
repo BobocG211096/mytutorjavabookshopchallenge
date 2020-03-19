@@ -14,9 +14,12 @@ import static java.util.Arrays.stream;
 
 @Component
 public class BookshopInitializerRunner implements ApplicationRunner {
-    @Autowired
     private BookshopRepository<Map<String, Book>> bookshopRepository;
 
+    @Autowired
+    public BookshopInitializerRunner(BookshopRepository bookshopRepository) {
+        this.bookshopRepository = bookshopRepository;
+    }
 
     @Override
     public void run(ApplicationArguments args) {
