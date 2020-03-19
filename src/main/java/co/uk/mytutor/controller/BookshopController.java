@@ -1,5 +1,6 @@
 package co.uk.mytutor.controller;
 
+import co.uk.mytutor.model.ResultDTO;
 import co.uk.mytutor.service.BookshopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,9 @@ public class BookshopController {
     }
 
     @GetMapping("/books")
-    public ResponseEntity<String> getBook(@RequestParam String bookType, @RequestParam Integer quantity) {
+    public ResponseEntity<ResultDTO<String>> getBook(@RequestParam String bookType, @RequestParam Integer quantity) {
         String bookShopServiceResponse = bookshopService.getBook(bookType, quantity);
-        return new ResponseEntity<>(bookShopServiceResponse, HttpStatus.OK);
+        return new ResponseEntity<ResultDTO<String>>(new ResultDTO(bookShopServiceResponse), HttpStatus.OK);
     }
 
     @GetMapping("/report")

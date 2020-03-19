@@ -1,0 +1,61 @@
+{
+	"info": {
+		"_postman_id": "1f42ab61-2eab-488a-872d-82e82ec18b64",
+		"name": "Bookshop API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Buy Book",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bookshop/books?bookType=A&quantity=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bookshop",
+						"books"
+					],
+					"query": [
+						{
+							"key": "bookType",
+							"value": "A"
+						},
+						{
+							"key": "quantity",
+							"value": "4"
+						}
+					]
+				},
+				"description": "\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Report",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bookshop/report",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bookshop",
+						"report"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
