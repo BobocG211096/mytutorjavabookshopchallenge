@@ -1,17 +1,24 @@
 package co.uk.mytutor.repository;
 
 import co.uk.mytutor.model.Book;
-import org.springframework.boot.test.context.TestComponent;
+import co.uk.mytutor.model.CustomerBookType;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@TestComponent
 public class MockBookshopInMemoryMapRepository implements BookshopRepository<Map<String, Book>>  {
     private Map<String, Book> books;
 
     public MockBookshopInMemoryMapRepository() {
-        books = new HashMap();
+        books = new HashMap<String, Book>(){
+            {
+                put(CustomerBookType.A.name(), new Book(10));
+                put(CustomerBookType.B.name(), new Book(10));
+                put(CustomerBookType.C.name(), new Book(10));
+                put(CustomerBookType.D.name(), new Book(10));
+                put(CustomerBookType.E.name(), new Book(10));
+            }
+        };
     }
 
     @Override
