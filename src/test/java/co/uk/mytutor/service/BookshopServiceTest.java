@@ -10,6 +10,8 @@ import org.junit.runners.JUnit4;
 
 import java.math.BigDecimal;
 
+import static java.util.Arrays.stream;
+
 @RunWith(JUnit4.class)
 public class BookshopServiceTest {
     private BookshopService bookshopServiceUnderTest;
@@ -54,4 +56,20 @@ public class BookshopServiceTest {
         Assert.assertEquals("Thank you for your purchase!", bookShopResponse);
         Assert.assertEquals(expectedBudget, bookshopServiceUnderTest.getBudget());
     }
+
+    @Test
+    public void testDisplayReport() {
+        stream(CustomerBookType.values()).forEach(customerBookType -> {
+            bookshopServiceUnderTest.getBook(customerBookType.name(), 3);
+        });
+
+        String expectedReport = "MyTutor Bookshop Balance: 875\n" +
+                "1.  Book A | 3 Copies Sold | £22.50 Total Profit\n" +
+                "2.  Book B | 3 Copies Sold | £18.00 Total Profit\n" +
+                "3.  Book C | 3 Copies Sold | £20.70 Total Profit\n" +
+                "4.  Book D | 3 Copies Sold | £27.00 Total Profit\n" +
+                "5.  Book E | 3 Copies Sold | £24.30 Total Profit";
+        Assert.assertEquals(expectedReport, bookshopServiceUnderTest.displayReport());
+    }
+
 }

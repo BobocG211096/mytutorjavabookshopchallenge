@@ -24,4 +24,10 @@ public class BookshopController {
         String bookShopServiceResponse = bookshopService.getBook(bookType, quantity);
         return new ResponseEntity<>(bookShopServiceResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/report")
+    public ResponseEntity<String> getReport() {
+        String bookShopServiceResponse = bookshopService.displayReport();
+        return new ResponseEntity<>(bookShopServiceResponse, HttpStatus.OK);
+    }
 }

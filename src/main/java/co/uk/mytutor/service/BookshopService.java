@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Arrays.stream;
 
@@ -29,12 +31,12 @@ public class BookshopService {
                 try {
                     Thread.sleep(recheckStockTimeSeconds * 1000);
                     stream(CustomerBookType.values()).forEach(customerBookType -> {
-                        Integer bookQuantity = bookshopRepository.getBook(customerBookType.name()).getQuantity();
-                        if (bookQuantity < 3) {
+                        Book book = bookshopRepository.getBook(customerBookType.name());
+                        if (book.getQuantity() < 3) {
                             budget = budget.subtract(BigDecimal.valueOf(customerBookType.getPrice())
                                     .multiply(BigDecimal.valueOf(0.7))
-                                    .multiply(BigDecimal.valueOf(10)));
-                            bookshopRepository.addBook(customerBookType.name(), new Book(bookQuantity + 10));
+                                    .multiply(BigDecimal.valueOf(10))).setScale(2, RoundingMode.HALF_EVEN);
+                            bookshopRepository.addBook(customerBookType.name(), new Book(book.getQuantity() + 10, book.getQuantitySold()));
                         }
                     });
                 } catch (InterruptedException e) {
@@ -55,9 +57,27 @@ public class BookshopService {
         } else {
             budget = budget.add(BigDecimal.valueOf(CustomerBookType.valueOf(bookType).getPrice()).multiply(BigDecimal.valueOf(quantity)));
             book.setQuantity(bookQuantity - quantity);
+            book.setQuantitySold(book.getQuantitySold() + quantity);
 
             return "Thank you for your purchase!" ;
         }
+    }
+
+    public String displayReport() {
+        StringBuilder reportBuilder = new StringBuilder("MyTutor Bookshop Balance: " + budget + "\n");
+        AtomicReference<Integer> indexOfBook = new AtomicReference<>(1);
+
+        stream(CustomerBookType.values()).forEach(customerBookType -> {
+            Integer quantitySold = bookshopRepository.getBook(customerBookType.name()).getQuantitySold();
+
+                reportBuilder.append(indexOfBook + ". " + " Book " + customerBookType + " | " + quantitySold + " Copies Sold" + " | " + "£" + BigDecimal.valueOf(customerBookType.getPrice() * 0.3 * quantitySold).setScale(2, RoundingMode.HALF_EVEN) + " Total Profit");
+                indexOfBook.getAndSet(indexOfBook.get() + 1);
+            if(indexOfBook.get() <= CustomerBookType.values().length) {
+                reportBuilder.append("\n");
+            }
+        });
+
+        return reportBuilder.toString();
     }
 
     public BigDecimal getBudget() {
