@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static java.util.Arrays.stream;
 
@@ -43,14 +44,16 @@ public class BookshopServiceTest {
         //because is slowing down the build in the production
         Thread.sleep(2000);
         Assert.assertEquals("Thank you for your purchase!", bookShopResponse);
+        Assert.assertEquals(BigDecimal.valueOf(525).setScale(2, RoundingMode.HALF_EVEN), bookshopServiceUnderTest.getBudget());
         Assert.assertEquals(Integer.valueOf(12), mockBookshopInMemoryMapRepository.getBooks().get(customerBookTypeUsedForTests.name()).getQuantity());
     }
 
     @Test
     public void testUpdateOfTheBudget() throws InterruptedException {
         String bookShopResponse = bookshopServiceUnderTest.getBook(customerBookTypeUsedForTests.name(), 2);
-        BigDecimal expectedBudget = BigDecimal.valueOf(500).
-                add(BigDecimal.valueOf(customerBookTypeUsedForTests.getPrice()).multiply(BigDecimal.valueOf(2)));
+        BigDecimal expectedBudget = BigDecimal.valueOf(500)
+                .add(BigDecimal.valueOf(customerBookTypeUsedForTests.getPrice()).multiply(BigDecimal.valueOf(2)))
+                .setScale(2, RoundingMode.HALF_EVEN);
 
 
         Assert.assertEquals("Thank you for your purchase!", bookShopResponse);

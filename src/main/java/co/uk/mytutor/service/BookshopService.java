@@ -81,6 +81,6 @@ public class BookshopService {
     }
 
     public BigDecimal getBudget() {
-        return budget;
+        return budget.setScale(2, RoundingMode.HALF_EVEN);
     }
 }
