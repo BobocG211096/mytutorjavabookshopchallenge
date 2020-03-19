@@ -1,0 +1,3 @@
+application.bookshop:
+  service:
+    recheckStockTimeSeconds: 25
