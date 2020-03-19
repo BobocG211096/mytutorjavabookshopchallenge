@@ -10,7 +10,6 @@ import java.util.Map;
 public class BookshopInMemoryListRepository implements BookshopRepository<Map<String, Book>> {
     private Map<String, Book> books;
 
-
     public BookshopInMemoryListRepository() {
         this.books = new HashMap<>();
     }
